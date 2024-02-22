@@ -7,6 +7,9 @@ using System.Text;
 
 namespace RestServerProgram.Controllers
 {
+    /// <summary>
+    /// CustomerController
+    /// </summary>
     public class CustomerController : System.Web.Http.ApiController
     {
         IDistributedCachingService _service;
@@ -15,7 +18,11 @@ namespace RestServerProgram.Controllers
         {
             _service = service;
         }
-        
+
+        /// <summary>
+        /// Add customer
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public bool AddCustomer([FromBody] string customers)
         {
@@ -50,7 +57,11 @@ namespace RestServerProgram.Controllers
             }
             return flag;
         }
-        
+
+        /// <summary>
+        /// Get All Customers
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public List<Customer> GetCustomer()
         {
