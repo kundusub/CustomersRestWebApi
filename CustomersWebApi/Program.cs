@@ -2,6 +2,12 @@ using CustomersWebApi.DistributedCache;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddTransient<IDistributedCachingService, DistributedCachingService>();
+
+builder.Services.AddDistributedMemoryCache(opt => {
+
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -23,11 +29,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-builder.Services.AddDistributedMemoryCache(opt => {
-    // opt
-});
-
-builder.Services.AddTransient<IDistributedCachingService, DistributedCachingService>();
 
 app.Run();
