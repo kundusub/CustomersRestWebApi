@@ -30,10 +30,10 @@ namespace RestServerProgram.Controllers
             List<Customer> freshCustomerList = new List<Customer>();
             try
             {
-                var CustomerListAbove18 = customers != null ? customers.Where(y => 
-                                                                               !string.IsNullOrEmpty(y.Id.ToString()) ||
-                                                                               !String.IsNullOrEmpty(y.FirstName) || 
-                                                                               !String.IsNullOrEmpty(y.LastName) ||
+                var CustomerListAbove18 = customers != null ? customers.Where(y => y.Id != 0 &&
+                                                                               !string.IsNullOrEmpty(y.Id.ToString()) &&
+                                                                               !String.IsNullOrEmpty(y.FirstName) && 
+                                                                               !String.IsNullOrEmpty(y.LastName) &&
                                                                                !String.IsNullOrEmpty(y.Age.ToString())
                                                                             )
                                                                         .Where(x => x.Age >= 18)
