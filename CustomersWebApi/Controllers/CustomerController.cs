@@ -45,7 +45,6 @@ namespace RestServerProgram.Controllers
                 {
                     foreach (var cachedCustomer in cachedCustomerSortedList)
                     {
-                        bool idMatched = false;
                         freshCustomerList.Add(cachedCustomer);
                         foreach (var newCustomer in CustomerListAbove18)
                         {
