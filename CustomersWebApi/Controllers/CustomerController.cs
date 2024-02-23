@@ -1,6 +1,5 @@
 using CustomersWebApi.DistributedCache;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using RestServerProgram.Model;
 using System.Text;
@@ -24,27 +23,43 @@ namespace RestServerProgram.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public bool AddCustomer([FromBody] string customers)
+        [Route("api/Customer/AddCustomer")]
+        public bool AddCustomer([FromBody] List<Customer> customers)
         {
             bool flag = false;
             List<Customer> freshCustomerList = new List<Customer>();
             try
             {
-                var newCustomerList = JsonConvert.DeserializeObject<List<Customer>>(customers);
-                var CustomerListAbove18 = newCustomerList != null ? newCustomerList.Where(x => x.Age > 18)
-                    .OrderBy(x => x.LastName).OrderBy(x => x.FirstName).ToList() : null;
+                var CustomerListAbove18 = customers != null ? customers.Where(y => 
+                                                                               !string.IsNullOrEmpty(y.Id.ToString()) ||
+                                                                               !String.IsNullOrEmpty(y.FirstName) || 
+                                                                               !String.IsNullOrEmpty(y.LastName) ||
+                                                                               !String.IsNullOrEmpty(y.Age.ToString())
+                                                                            )
+                                                                        .Where(x => x.Age > 18)
+                                                                            .OrderBy(x => x.LastName).OrderBy(x => x.FirstName).ToList() : null;
+
                 var cachedCustomerSortedList = _service.GetCacheData().OrderBy(x => x.LastName).OrderBy(x => x.FirstName);
 
-
-                foreach (var cachedCustomer in cachedCustomerSortedList)
+                if (cachedCustomerSortedList.Count() > 0)
                 {
-                    bool idMatched = false;
-                    freshCustomerList.Add(cachedCustomer);
+                    foreach (var cachedCustomer in cachedCustomerSortedList)
+                    {
+                        bool idMatched = false;
+                        freshCustomerList.Add(cachedCustomer);
+                        foreach (var newCustomer in CustomerListAbove18)
+                        {
+                            if (cachedCustomer.Id == newCustomer.Id)
+                                break;
+
+                            freshCustomerList.Add(newCustomer);
+                        }
+                    }
+                }
+                else
+                {
                     foreach (var newCustomer in CustomerListAbove18)
                     {
-                        if (cachedCustomer.Id == newCustomer.Id)
-                            break;
-
                         freshCustomerList.Add(newCustomer);
                     }
                 }
@@ -63,6 +78,7 @@ namespace RestServerProgram.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Route("api/Customer/GetCustomer")]
         public List<Customer> GetCustomer()
         {
             List<Customer> customerList = new List<Customer>();

@@ -23,8 +23,13 @@ namespace CustomersWebApi.DistributedCache
         }
         public Customer[] GetCacheData()
         {
-            var bytesAsString = Encoding.UTF8.GetString(_distributedCache.Get("Customers"));
-            return JsonConvert.DeserializeObject<Customer[]>(bytesAsString);
+            Customer[] result = new Customer[0];
+            if (_distributedCache.Get("Customers") != null)
+            {
+                var bytesAsString = Encoding.UTF8.GetString(_distributedCache.Get("Customers"));
+                result = JsonConvert.DeserializeObject<Customer[]>(bytesAsString);
+            }
+            return result;
 
         }
     }
