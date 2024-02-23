@@ -36,7 +36,7 @@ namespace RestServerProgram.Controllers
                                                                                !String.IsNullOrEmpty(y.LastName) ||
                                                                                !String.IsNullOrEmpty(y.Age.ToString())
                                                                             )
-                                                                        .Where(x => x.Age > 18)
+                                                                        .Where(x => x.Age >= 18)
                                                                             .OrderBy(x => x.LastName).OrderBy(x => x.FirstName).ToList() : null;
 
                 var cachedCustomerSortedList = _service.GetCacheData().OrderBy(x => x.LastName).OrderBy(x => x.FirstName);
