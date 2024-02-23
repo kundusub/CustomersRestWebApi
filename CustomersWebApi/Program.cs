@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddTransient<IDistributedCachingService, DistributedCachingService>();
 
 builder.Services.AddDistributedMemoryCache(opt => {
-
+    //We can use Redis cache or Sql Server or other distributed caching
 });
 
 // Add services to the container.
