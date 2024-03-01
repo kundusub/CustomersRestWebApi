@@ -26,7 +26,7 @@ namespace CustomersWebApi.DistributedCache
             Customer[] result = new Customer[0];
             if (_distributedCache.Get("Customers") != null)
             {
-                var bytesAsString = Encoding.UTF8.GetString(_distributedCache.Get("Customers"));
+                var bytesAsString = Encoding.UTF8.GetString(_distributedCache.GetAsync("Customers").Result);
                 result = JsonConvert.DeserializeObject<Customer[]>(bytesAsString);
             }
             return result;
